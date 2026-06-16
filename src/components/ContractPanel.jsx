@@ -39,7 +39,7 @@ export default function ContractPanel({
 
       // Create a dummy account for simulation
       const dummyAccount = new StellarSdk.Account('GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF', '0');
-      
+
       const tx = new StellarSdk.TransactionBuilder(dummyAccount, {
         fee: '100',
         networkPassphrase: StellarSdk.Networks.TESTNET,
@@ -51,15 +51,16 @@ export default function ContractPanel({
       const simResult = await rpcServer.simulateTransaction(tx);
 
       if (StellarSdk.rpc.Api.isSimulationSuccess(simResult)) {
-        if (simResult.results && simResult.results[0] && simResult.results[0].retval) {
-          const rawVal = simResult.results[0].retval;
-          const nativeVal = StellarSdk.scValToNative(rawVal);
-          setCounterValue(nativeVal);
+        // SDK v16: result is in simResult.result.retval (singular)
+        const retval = simResult.result?.retval ?? (simResult.results?.[0]?.retval);
+        if (retval) {
+          const nativeVal = StellarSdk.scValToNative(retval);
+          // Convert BigInt to Number for display
+          setCounterValue(typeof nativeVal === 'bigint' ? Number(nativeVal) : nativeVal);
         } else {
           setCounterValue(0);
         }
       } else {
-        // Fallback: If get_value fails due to missing state (uninitialized), it's effectively 0
         const simErr = simResult.error || '';
         if (simErr.includes('MissingValue') || simErr.includes('Storage')) {
           setCounterValue(0);
@@ -69,7 +70,6 @@ export default function ContractPanel({
       }
     } catch (err) {
       console.error('Failed to read contract value:', err);
-      // If the simulation fails because the contract is not found or not initialized yet
       setReadError('Could not read state (uninitialized or expired)');
       setCounterValue(null);
     } finally {
