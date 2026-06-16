@@ -7,6 +7,7 @@ import SendForm from './components/SendForm';
 import ActivityLog from './components/ActivityLog';
 import TransactionResult from './components/TransactionResult';
 import TransactionConfirmModal from './components/TransactionConfirmModal';
+import ContractPanel from './components/ContractPanel';
 
 export default function App() {
   const {
@@ -32,6 +33,7 @@ export default function App() {
     error: txError,
     errorCode: txErrorCode,
     sendTransaction,
+    invokeContract,
     resetTxState,
   } = useTransaction();
 
@@ -73,7 +75,7 @@ export default function App() {
             ⭐ StellarPay
           </h2>
           <p className="text-xs text-textMuted/80 mt-1 max-w-[500px] leading-relaxed">
-            Send XLM instantly on Stellar Testnet
+            Send XLM instantly on Stellar Testnet & Interact with Smart Contracts
           </p>
         </header>
 
@@ -95,6 +97,15 @@ export default function App() {
               refreshBalance={refreshBalance}
               fundAccount={fundAccount}
             />
+            {publicKey && (
+              <ContractPanel
+                publicKey={publicKey}
+                signTx={signTx}
+                invokeContract={invokeContract}
+                txState={txState}
+                refreshBalance={refreshBalance}
+              />
+            )}
           </div>
           
           {/* Right Column: Send Form, Ledger Activity & Results (7 columns) */}

@@ -1,7 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import { isConnected, requestAccess, getAddress, signTransaction } from '@stellar/freighter-api';
+import { StellarWalletsKit, Networks } from '@creit.tech/stellar-wallets-kit';
+import { defaultModules } from '@creit.tech/stellar-wallets-kit/modules/utils';
 import { fetchXlmBalance, fundWithFriendbot, getHorizonServer } from '../utils/stellar';
 import * as StellarSdk from 'stellar-sdk';
+
+// Initialize the Stellar Wallets Kit once
+StellarWalletsKit.init({
+  modules: defaultModules(),
+  network: Networks.TESTNET,
+});
 
 export const useWallet = () => {
   const [publicKey, setPublicKey] = useState(() => {
@@ -90,17 +97,9 @@ export const useWallet = () => {
     }
   }, [publicKey, refreshActivity]);
 
-  // Check if Freighter is installed
+  // Set isInstalled to true since we have multiple wallet options available
   useEffect(() => {
-    const checkFreighter = async () => {
-      try {
-        const connected = await isConnected();
-        setIsInstalled(!!connected);
-      } catch (err) {
-        setIsInstalled(false);
-      }
-    };
-    checkFreighter();
+    setIsInstalled(true);
   }, []);
 
   // Sync public key/demo state to localStorage
@@ -135,25 +134,11 @@ export const useWallet = () => {
     setLoading(true);
     setError(null);
     try {
-      const isConnectedWallet = await isConnected();
-      if (!isConnectedWallet) {
-        throw new Error("Freighter wallet is not installed.");
-      }
+      const modalResult = await StellarWalletsKit.authModal();
+      const pubKey = modalResult.address;
       
-      // Request access
-      const accessResult = await requestAccess();
-      if (accessResult && accessResult.error) {
-        throw new Error(accessResult.error.message || accessResult.error);
-      }
-      
-      const addrResult = await getAddress();
-      if (addrResult && addrResult.error) {
-        throw new Error(addrResult.error.message || addrResult.error);
-      }
-      
-      const pubKey = typeof addrResult === 'string' ? addrResult : (addrResult.address || addrResult);
-      if (!pubKey || typeof pubKey !== 'string') {
-        throw new Error("Could not retrieve public key. Please unlock Freighter.");
+      if (!pubKey) {
+        throw new Error("Could not retrieve public key. Please unlock your wallet.");
       }
       
       setIsDemoMode(false);
@@ -161,7 +146,20 @@ export const useWallet = () => {
       setPublicKey(pubKey);
       await refreshBalance(pubKey);
     } catch (err) {
-      setError(err.message || "Failed to connect wallet");
+      console.error("Wallet connection error:", err);
+      let userFriendlyError = err.message || err.toString() || "Failed to connect wallet";
+      
+      if (
+        userFriendlyError.includes("not install") || 
+        userFriendlyError.includes("not connected") || 
+        userFriendlyError.includes("is not available")
+      ) {
+        userFriendlyError = "Wallet not found: Please install the selected extension.";
+      } else if (userFriendlyError.includes("closed the modal")) {
+        userFriendlyError = "Connection cancelled: The modal was closed.";
+      }
+      
+      setError(userFriendlyError);
       setPublicKey(null);
       setBalance(null);
     } finally {
@@ -236,20 +234,25 @@ export const useWallet = () => {
       tx.sign(keypair);
       return tx.toXDR();
     } else {
-      // Freighter signature flow
-      const result = await signTransaction(txXdr, {
-        network: "TESTNET",
-        networkPassphrase: StellarSdk.Networks.TESTNET,
-        address: publicKey,
-      });
-      if (result && result.error) {
-        throw new Error(result.error.message || result.error || "Transaction cancelled by user");
+      try {
+        const result = await StellarWalletsKit.signTransaction(txXdr, {
+          networkPassphrase: StellarSdk.Networks.TESTNET,
+          address: publicKey,
+        });
+        return result.signedTxXdr;
+      } catch (err) {
+        console.error("Signing rejected:", err);
+        let errMsg = err.message || err.toString() || "Transaction cancelled by user";
+        if (
+          errMsg.toLowerCase().includes("cancel") || 
+          errMsg.toLowerCase().includes("reject") || 
+          errMsg.toLowerCase().includes("user reject") ||
+          errMsg.toLowerCase().includes("declined")
+        ) {
+          throw new Error("User rejected: The transaction signing request was cancelled.");
+        }
+        throw new Error(errMsg);
       }
-      const signedXdr = typeof result === 'string' ? result : (result.signedTxXdr || result);
-      if (!signedXdr) {
-        throw new Error("Transaction cancelled by user");
-      }
-      return signedXdr;
     }
   };
 
