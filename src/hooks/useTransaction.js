@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import { getHorizonServer } from '../utils/stellar';
 
 export const useTransaction = () => {
@@ -173,7 +173,10 @@ export const useTransaction = () => {
       // Poll transaction status
       let txResult = submitResult;
       let attempts = 0;
-      while (txResult.status === "PENDING" && attempts < 25) {
+      while (
+        (txResult.status === "PENDING" || txResult.status === "NOT_FOUND") &&
+        attempts < 25
+      ) {
         await new Promise(r => setTimeout(r, 1000));
         txResult = await rpcServer.getTransaction(submitResult.hash);
         attempts++;

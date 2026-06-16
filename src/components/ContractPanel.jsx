@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 
 export default function ContractPanel({
   publicKey,
@@ -9,7 +9,7 @@ export default function ContractPanel({
   refreshBalance,
 }) {
   const [contractId, setContractId] = useState(
-    localStorage.getItem('stellar_pay_contract_id') || 'CBEOJUP5FU6KKOEZ7RMTSKZ7YLBS5D6LVATIGCESOGXSZEQ2UWQFKZW6'
+    localStorage.getItem('stellar_pay_contract_id_v2') || 'CANKOB2VLLLRDXYBDRMCUM754QIDGW2Y27FUHC26PLKJQ5PYTZSFIE3P'
   );
   const [counterValue, setCounterValue] = useState(null);
   const [loadingValue, setLoadingValue] = useState(false);
@@ -19,7 +19,7 @@ export default function ContractPanel({
 
   // Save contract ID to local storage when changed
   useEffect(() => {
-    localStorage.setItem('stellar_pay_contract_id', contractId);
+    localStorage.setItem('stellar_pay_contract_id_v2', contractId);
     setTempId(contractId);
   }, [contractId]);
 

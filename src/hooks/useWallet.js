@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { StellarWalletsKit, Networks } from '@creit.tech/stellar-wallets-kit';
 import { defaultModules } from '@creit.tech/stellar-wallets-kit/modules/utils';
 import { fetchXlmBalance, fundWithFriendbot, getHorizonServer } from '../utils/stellar';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 
 // Initialize the Stellar Wallets Kit once
 StellarWalletsKit.init({

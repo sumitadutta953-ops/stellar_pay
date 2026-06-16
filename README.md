@@ -24,7 +24,7 @@ StellarPay is updated to a Level 2 (Yellow Belt) dApp demonstrating core Stellar
 
 ## 🔑 Level 2 Submission Details
 
-- **Deployed Contract ID:** `CBEOJUP5FU6KKOEZ7RMTSKZ7YLBS5D6LVATIGCESOGXSZEQ2UWQFKZW6` (Update this after deploying your own!)
+- **Deployed Contract ID:** `CANKOB2VLLLRDXYBDRMCUM754QIDGW2Y27FUHC26PLKJQ5PYTZSFIE3P`
 - **Contract Call Tx Hash:** `[Your Tx Hash Here - e.g. 5ca7fa...]`
 
 ---
