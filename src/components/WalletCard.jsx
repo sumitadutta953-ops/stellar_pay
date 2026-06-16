@@ -37,7 +37,7 @@ export default function WalletCard({
                 ? 'bg-secondary/10 text-secondary border-secondary/25'
                 : 'bg-primary/10 text-primary border-primary/25'
             }`}>
-              Connected ({isDemoMode ? 'Simulator' : 'Freighter'})
+              Connected ({isDemoMode ? 'Simulator' : 'Wallet'})
             </span>
           </div>
         )}
@@ -115,7 +115,7 @@ export default function WalletCard({
               <div className="space-y-1">
                 <h3 className="text-sm font-bold font-space text-textPrimary">Connect Your Wallet</h3>
                 <p className="text-xs text-textMuted max-w-[320px] mx-auto leading-relaxed">
-                  Sign in with Freighter to manage assets, or launch the Simulator to test payments immediately.
+                  Sign in with your wallet to manage assets, or launch the Simulator to test payments immediately.
                 </p>
               </div>
 
@@ -138,7 +138,7 @@ export default function WalletCard({
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                       </svg>
-                      <span>Connect Freighter</span>
+                      <span>Connect Wallet</span>
                     </>
                   )}
                 </button>
