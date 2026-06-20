@@ -76,11 +76,10 @@ All screenshots are stored under `src/level_2_ss/`:
 
 - **ss1.png**: Wallet selection modal (multiple wallets visible)
 - **ss2.png**: Connected wallet details and XLM balance
-- **ss3.png**: Current contract state read from on-chain
-- **ss4.png**: Transaction pending loading state (spinner)
-- **ss5.png**: Transaction success confirmation and hash
-- **ss6.png**: Active error message (e.g. User Rejected)
-- **ss7.png**: Transaction verified on Stellar Expert explorer
+- **ss3.png**: Transaction pending loading state (spinner)
+- **ss4.png**: Transaction success confirmation and hash
+- **ss5.png**: Active error message (e.g. User Rejected)
+- **ss6.png**: Transaction verified on Stellar Expert explorer
 
 ---
 
