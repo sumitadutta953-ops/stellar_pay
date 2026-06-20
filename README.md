@@ -1,6 +1,6 @@
-# StellarPay 🚀 (Level 2 Yellow Belt)
+# StellarPay 🚀
 
-A Stellar payment and smart contract dApp built on Stellar Testnet that lets you connect multiple wallets, send XLM, and read/write values to a deployed Soroban contract.
+A simple Stellar payment dApp built on testnet that lets you connect your Freighter wallet, view your XLM balance, and send XLM transactions — all from the browser.
 
 **Live Demo:** https://stellar-pay-umber.vercel.app/  
 **GitHub:** https://github.com/sumitadutta953-ops/stellar_pay
@@ -9,23 +9,12 @@ A Stellar payment and smart contract dApp built on Stellar Testnet that lets you
 
 ## 📋 Project Description
 
-StellarPay is updated to a Level 2 (Yellow Belt) dApp demonstrating core Stellar development fundamentals:
+StellarPay is a beginner-friendly Stellar dApp built as part of the White Belt level challenge. It demonstrates core Stellar development fundamentals:
 
-- **StellarWalletsKit Multi-Wallet Integration**: Connect via Freighter, xBull, Albedo, or Rabet.
-- **Soroban Smart Contract**: Live read/write interactions with an on-chain Counter contract.
-- **Advanced Error Handling**: User-facing visual alerts for:
-  - *Wallet not found* (when the selected extension is not installed)
-  - *User rejected* (when the signature request is cancelled)
-  - *Insufficient balance* (when XLM is too low for transfer or gas fees)
-- **Transaction Status Tracking**: Dynamic visual feedback states (Pending, Success, Failed) with direct links to `stellar.expert` explorer.
-- **State Sync**: Contract state re-fetches and updates automatically on success without needing page refreshes.
-
----
-
-## 🔑 Level 2 Submission Details
-
-- **Deployed Contract ID:** `CANKOB2VLLLRDXYBDRMCUM754QIDGW2Y27FUHC26PLKJQ5PYTZSFIE3P`
-- **Contract Call Tx Hash:** `[Your Tx Hash Here - e.g. 5ca7fa...]`
+- Connecting and disconnecting a Freighter wallet
+- Fetching and displaying live XLM balance from Stellar testnet
+- Sending XLM transactions on Stellar testnet
+- Showing real-time transaction feedback (success/failure + transaction hash)
 
 ---
 
@@ -33,58 +22,82 @@ StellarPay is updated to a Level 2 (Yellow Belt) dApp demonstrating core Stellar
 
 - **React** + **Vite**
 - **Tailwind CSS**
-- **@creit.tech/stellar-wallets-kit** — wallet abstraction
-- **@stellar/stellar-sdk** — network and Soroban RPC interactions
-- **Stellar Testnet** (RPC: https://soroban-testnet.stellar.org)
+- **@stellar/freighter-api** — wallet connection
+- **@stellar/stellar-sdk** — Stellar network interactions
+- **Stellar Testnet** (Horizon: https://horizon-testnet.stellar.org)
 
 ---
 
-## ⚙️ Setup & Deployment Instructions
+## ⚙️ Setup Instructions (Run Locally)
 
 ### Prerequisites
+
 - Node.js v18+
-- [Stellar CLI](https://developers.stellar.org/docs/tools/stellar-cli)
-- Rust toolchain and `wasm32-unknown-unknown` target
+- [Freighter Wallet](https://freighter.app/) browser extension installed
+- Freighter set to **Testnet** mode
 
-### 1. Compile & Deploy the Smart Contract
+### Steps
+
 ```bash
-# Move to the contracts directory
-cd contracts
+# 1. Clone the repository
+git clone https://github.com/sumitadutta953-ops/stellar_pay.git
+cd stellar_pay
 
-# Build the WASM binary
-stellar contract build
-
-# Deploy to Testnet (using target wasm32-unknown-unknown or wasm32v1-none)
-stellar contract deploy --wasm target/wasm32-unknown-unknown/release/stellar_pay_counter.wasm --source <your-key-alias> --network testnet
-```
-*Take note of the deployed Contract ID.*
-
-### 2. Run the Frontend Locally
-```bash
-# Back to project root
-cd ..
+# 2. Install dependencies
 npm install
+
+# 3. Start the development server
 npm run dev
+
+# 4. Open in browser
+# http://localhost:5173
 ```
-Open [http://localhost:5173](http://localhost:5173) in your browser. Paste your new Contract ID into the **Change ID** field in the contract panel to test.
+
+> **Fund your testnet wallet:** Visit [Stellar Friendbot](https://friendbot.stellar.org/) and enter your public key to get free testnet XLM.
 
 ---
 
-## 📸 Level 2 Screenshots
+## 🎯 Features
 
-All screenshots are stored under `src/level_2_ss/`:
+| Feature | Status |
+|---------|--------|
+| Freighter wallet connect | ✅ |
+| Freighter wallet disconnect | ✅ |
+| XLM balance display | ✅ |
+| Send XLM on testnet | ✅ |
+| Transaction hash feedback | ✅ |
+| Success / failure states | ✅ |
 
-- **ss1.png**: Wallet selection modal (multiple wallets visible)
-- **ss2.png**: Connected wallet details and XLM balance
-- **ss3.png**: Current contract state read from on-chain
-- **ss4.png**: Transaction pending loading state (spinner)
-- **ss5.png**: Transaction success confirmation and hash
-- **ss6.png**: Active error message (e.g. User Rejected)
-- **ss7.png**: Transaction verified on Stellar Expert explorer
+---
+
+## 📸 Screenshots
+
+### 1. Landing Page (Wallet Not Connected)
+![Wallet Disconnected](./src/level_1_ss/ss1.png)
+
+### 2. Wallet Connected + Balance Displayed
+![Wallet Connected](./src/level_1_ss/ss2.png)
+
+### 3. Transaction Signing (Freighter Permission Popup)
+![Transaction Signing](./src/level_1_ss/ss3.png)
+
+### 4. Successful Transaction
+![Transaction Success](./src/level_1_ss/ss4.png)
+
+### 5. Transaction Verified on Stellar Expert
+![Stellar Expert Verification](./src/level_1_ss/ss5.png)
+
+---
+
+## 🔗 Resources
+
+- [Stellar Documentation](https://developers.stellar.org/)
+- [Freighter Wallet](https://freighter.app/)
+- [Stellar Testnet Explorer](https://stellar.expert/explorer/testnet)
+- [Stellar Friendbot (Faucet)](https://friendbot.stellar.org/)
 
 ---
 
 ## 📄 License
 
 MIT
-
