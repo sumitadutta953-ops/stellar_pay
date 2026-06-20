@@ -27,7 +27,7 @@ export async function fetchContractEvents(
     return (response.events ?? []).map((ev, idx) => ({
       id: `${ev.ledger}-${idx}`,
       type: ev.type,
-      contractId: ev.contractId,
+      contractId: (ev.contractId as any)?.contractId?.('C') || (ev.contractId as any)?.toString() || contractId,
       topic: ev.topic.map(t => {
         try {
           return JSON.stringify(StellarSdk.scValToNative(t));

@@ -49,23 +49,26 @@ export async function invokeContractFunction(
   const submitResult = await rpc.sendTransaction(signedTx);
 
   if (submitResult.status === 'ERROR') {
-    throw new Error(submitResult.errorResultXdr ?? 'Submission failed');
+    throw new Error((submitResult as any).errorResultXdr ?? (submitResult as any).errorResult ?? 'Submission failed');
   }
 
   // Poll
-  let txResult = submitResult;
+  let status: string = submitResult.status;
   let attempts = 0;
+  let getTxResponse: StellarSdk.rpc.Api.GetTransactionResponse | null = null;
+  
   while (
-    (txResult.status === 'PENDING' || txResult.status === 'NOT_FOUND') &&
+    (status === 'PENDING' || status === 'NOT_FOUND' || status === 'DUPLICATE' || status === 'TRY_AGAIN_LATER') &&
     attempts < 30
   ) {
     await new Promise(r => setTimeout(r, 1000));
-    txResult = await rpc.getTransaction(submitResult.hash);
+    getTxResponse = await rpc.getTransaction(submitResult.hash);
+    status = getTxResponse.status;
     attempts++;
   }
 
-  if (txResult.status !== 'SUCCESS') {
-    throw new Error((txResult as { errorResultXdr?: string }).errorResultXdr ?? 'TX failed');
+  if (status !== 'SUCCESS') {
+    throw new Error((getTxResponse as any)?.errorResultXdr ?? (getTxResponse as any)?.errorResult ?? 'TX failed');
   }
 
   logger.info('Contract call succeeded:', submitResult.hash);
