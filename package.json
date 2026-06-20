@@ -12,6 +12,7 @@
   "dependencies": {
     "@creit.tech/stellar-wallets-kit": "^2.3.0",
     "@stellar/freighter-api": "^6.0.1",
+    "@stellar/stellar-sdk": "^16.0.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "stellar-sdk": "^13.3.0"
