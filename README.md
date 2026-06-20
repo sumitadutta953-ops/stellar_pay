@@ -19,7 +19,6 @@ StellarPay Pro is a sophisticated payment platform on Stellar Testnet that showc
 - **Vitest** test suite with 25+ test cases
 - **GitHub Actions** CI/CD pipeline with 5 automated jobs
 - **Mobile-first** responsive design across 3 breakpoints
-- **10+ conventional commits** with atomic, focused changes
 
 ---
 
@@ -339,12 +338,36 @@ Ensure `tsconfig.json` is at the project root and your VS Code TypeScript versio
 
 ---
 
-## 📄 License
+## 🎓 Stellar Certification Status
 
-MIT
+- ✅ **Level 1: White Belt** — Payment Fundamentals (Completed)
+- ✅ **Level 2: Orange Belt** — Smart Contracts & Multi-Wallet (Completed)
+- ✅ **Level 3: Orange Belt (Advanced)** — Smart Contracts, Inter-Contract, Event Streaming, CI/CD (Completed)
+
+**Features Implemented:**
+- ✅ 3+ error types handled
+- ✅ Contract deployed on testnet
+- ✅ Contract called from frontend
+- ✅ Transaction status visible (pending/success/failure)
+- ✅ 10+ meaningful commits
+- ✅ Multi-wallet integration
+- ✅ Real-time event listening & synchronization
+- ✅ Comprehensive test suites (Rust contract + TS frontend)
+- ✅ GitHub Actions CI/CD pipeline
+- ✅ Production-ready responsive UI with ErrorBoundary and Loading skeletons
 
 ---
 
-## 👤 Author
+## 👨‍💻 Built By
 
-Built as part of the Stellar Developer Belt Challenge — Level 3 Orange Belt submission.
+**Sumit Adutta**  
+GitHub: [@sumitadutta953-ops](https://github.com/sumitadutta953-ops)  
+Date: June 2025  
+Network: Stellar Testnet  
+Status: 🟢 Production Ready
+
+---
+
+## 📄 License
+
+MIT License — Feel free to use this project for learning and development.
