@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 
+/**
+ * Hook to persist component state inside browser local storage.
+ * Synchronizes key and value updates automatically.
+ */
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [value, setValue] = useState<T>(() => {
     try {
