@@ -49,16 +49,23 @@ export async function invokeContractFunction(
   const submitResult = await rpc.sendTransaction(signedTx);
 
   if (submitResult.status === 'ERROR') {
-    throw new Error((submitResult as any).errorResultXdr ?? (submitResult as any).errorResult ?? 'Submission failed');
+    throw new Error(
+      (submitResult as any).errorResultXdr ??
+        (submitResult as any).errorResult ??
+        'Submission failed'
+    );
   }
 
   // Poll
   let status: string = submitResult.status;
   let attempts = 0;
   let getTxResponse: StellarSdk.rpc.Api.GetTransactionResponse | null = null;
-  
+
   while (
-    (status === 'PENDING' || status === 'NOT_FOUND' || status === 'DUPLICATE' || status === 'TRY_AGAIN_LATER') &&
+    (status === 'PENDING' ||
+      status === 'NOT_FOUND' ||
+      status === 'DUPLICATE' ||
+      status === 'TRY_AGAIN_LATER') &&
     attempts < 30
   ) {
     await new Promise(r => setTimeout(r, 1000));
@@ -68,7 +75,9 @@ export async function invokeContractFunction(
   }
 
   if (status !== 'SUCCESS') {
-    throw new Error((getTxResponse as any)?.errorResultXdr ?? (getTxResponse as any)?.errorResult ?? 'TX failed');
+    throw new Error(
+      (getTxResponse as any)?.errorResultXdr ?? (getTxResponse as any)?.errorResult ?? 'TX failed'
+    );
   }
 
   logger.info('Contract call succeeded:', submitResult.hash);
@@ -102,8 +111,7 @@ export async function readContractValue(
     return simResult.result?.retval ?? null;
   }
 
-  const simError =
-    (simResult as StellarSdk.rpc.Api.SimulateTransactionErrorResponse).error ?? '';
+  const simError = (simResult as StellarSdk.rpc.Api.SimulateTransactionErrorResponse).error ?? '';
   if (simError.includes('MissingValue') || simError.includes('Storage')) {
     return null;
   }
