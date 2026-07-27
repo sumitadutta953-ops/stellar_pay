@@ -45,3 +45,5 @@ export function ContractLogs() {
     </Card>
   );
 }
+
+// conventional spacing comment for commit spacing
