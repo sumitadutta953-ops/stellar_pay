@@ -4,7 +4,14 @@ import type { ContractEvent } from '@/types/event';
 import { EVENT_POLL_INTERVAL_MS } from '@/utils/constants';
 import { logger } from '@/utils/logger';
 
-/** Poll Soroban contract events at a fixed interval */
+/**
+ * Hook to poll and monitor contract-specific events emitted by a Soroban smart contract.
+ * Periodically queries the RPC at fixed intervals, tracking ledgers using a reference cursor.
+ * Keeps a buffer of the latest 50 contract events.
+ * 
+ * @param contractId - The contract ID address (C...) to listen to
+ * @param enabled - Condition toggle to activate/deactivate polling
+ */
 export function useEventStream(contractId: string, enabled = true) {
   const [events, setEvents] = useState<ContractEvent[]>([]);
   const [isListening, setIsListening] = useState(false);
