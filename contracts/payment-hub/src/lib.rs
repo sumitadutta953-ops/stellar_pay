@@ -2,13 +2,14 @@
 
 use soroban_sdk::{
     contract, contractimpl, contracttype, symbol_short,
-    Address, Env, String, Symbol, Vec, log,
+    Address, Env, IntoVal, String, Symbol, Vec, log,
 };
 
 // ── Storage keys ────────────────────────────────────────────────────────────
 const PAYMENTS_KEY: Symbol = symbol_short!("PAYMENTS");
 const TOTAL_SENT: Symbol = symbol_short!("TOTALSENT");
 const PAY_COUNT: Symbol = symbol_short!("PAYCOUNT");
+const VALIDATOR_KEY: Symbol = symbol_short!("VALADDR");
 
 // ── Data structures ──────────────────────────────────────────────────────────
 #[contracttype]
@@ -29,6 +30,16 @@ pub struct PaymentHub;
 impl PaymentHub {
     /// Send a payment from caller to recipient.
     /// Validates via embedded logic (mirrors PaymentValidator rules).
+    /// Set the validator contract address.
+    pub fn set_validator(env: Env, validator: Address) {
+        env.storage().instance().set(&VALIDATOR_KEY, &validator);
+    }
+
+    /// Get the current validator contract address.
+    pub fn get_validator(env: Env) -> Option<Address> {
+        env.storage().instance().get(&VALIDATOR_KEY)
+    }
+
     pub fn send_payment(
         env: Env,
         sender: Address,
@@ -37,6 +48,36 @@ impl PaymentHub {
         memo: String,
     ) {
         sender.require_auth();
+
+        // ── Validator Inter-contract Call ─────────────────────────────────
+        if let Some(validator) = Self::get_validator(env.clone()) {
+            let is_valid: bool = env.invoke_contract(
+                &validator,
+                &Symbol::new(&env, "validate_payment"),
+                (amount, recipient.clone(), memo.clone()).into_val(&env),
+            );
+            if !is_valid {
+                log!(&env, "Payment failed: validator rejected amount {}", amount);
+                env.events().publish(
+                    (symbol_short!("PayFailed"), sender.clone()),
+                    (recipient.clone(), String::from_str(&env, "validator_rejected")),
+                );
+                
+                // Let's check if it exceeded limit to fire LimitOver event
+                let limit: i128 = env.invoke_contract(
+                    &validator,
+                    &Symbol::new(&env, "get_payment_limit"),
+                    ().into_val(&env),
+                );
+                if amount > limit {
+                    env.events().publish(
+                        (symbol_short!("LimitOver"), sender.clone()),
+                        (amount, limit),
+                    );
+                }
+                panic!("Payment validation failed by PaymentValidator");
+            }
+        }
 
         // ── Validation (mirrors PaymentValidator) ──────────────────────────
         if amount <= 0 {
@@ -145,7 +186,7 @@ impl PaymentHub {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use soroban_sdk::{testutils::Address as _, Env, String};
+    use soroban_sdk::{testutils::{Address as _, Events}, Env, String, FromVal};
 
     fn make_env() -> Env {
         Env::default()
@@ -320,5 +361,130 @@ mod tests {
 
         let count = client.get_payment_count(&user);
         assert_eq!(count, 0u32);
+    }
+
+    #[contract]
+    struct MockValidator;
+
+    #[contractimpl]
+    impl MockValidator {
+        pub fn validate_payment(
+            _env: Env,
+            amount: i128,
+            _recipient: Address,
+            _memo: String,
+        ) -> bool {
+            amount <= 1000
+        }
+
+        pub fn get_payment_limit(_env: Env) -> i128 {
+            1000
+        }
+    }
+
+    #[test]
+    fn test_inter_contract_call_works() {
+        let env = make_env();
+        let hub_id = env.register_contract(None, PaymentHub);
+        let hub_client = PaymentHubClient::new(&env, &hub_id);
+
+        let validator_id = env.register_contract(None, MockValidator);
+        hub_client.set_validator(&validator_id);
+        assert_eq!(hub_client.get_validator(), Some(validator_id.clone()));
+
+        let sender = Address::generate(&env);
+        let recipient = Address::generate(&env);
+
+        env.mock_all_auths();
+
+        // 1. Valid payment (amount <= 1000) succeeds
+        hub_client.send_payment(&sender, &recipient, &500i128, &make_string(&env, "ok"));
+        let history = hub_client.get_payment_history();
+        assert_eq!(history.len(), 1);
+        assert_eq!(history.get(0).unwrap().amount, 500i128);
+    }
+
+    #[test]
+    #[should_panic(expected = "Payment validation failed by PaymentValidator")]
+    fn test_inter_contract_validation_rejects() {
+        let env = make_env();
+        let hub_id = env.register_contract(None, PaymentHub);
+        let hub_client = PaymentHubClient::new(&env, &hub_id);
+
+        let validator_id = env.register_contract(None, MockValidator);
+        hub_client.set_validator(&validator_id);
+
+        let sender = Address::generate(&env);
+        let recipient = Address::generate(&env);
+
+        env.mock_all_auths();
+
+        // 2. Invalid payment (amount > 1000) fails and panics
+        hub_client.send_payment(&sender, &recipient, &1500i128, &make_string(&env, "too big"));
+    }
+
+    #[test]
+    fn test_event_emitted_correctly() {
+        let env = make_env();
+        let contract_id = env.register_contract(None, PaymentHub);
+        let client = PaymentHubClient::new(&env, &contract_id);
+
+        let sender = Address::generate(&env);
+        let recipient = Address::generate(&env);
+
+        env.mock_all_auths();
+
+        client.send_payment(
+            &sender,
+            &recipient,
+            &1000i128,
+            &make_string(&env, "event test"),
+        );
+
+        let events = env.events().all();
+        assert!(events.len() > 0);
+        let last_event = events.get(events.len() - 1).unwrap();
+        let topics = last_event.1;
+        assert_eq!(
+            soroban_sdk::Symbol::from_val(&env, &topics.get(0).unwrap()),
+            symbol_short!("PayRecvd")
+        );
+    }
+
+    #[test]
+    fn test_limit_exceeded_event_fired() {
+        let env = make_env();
+        let hub_id = env.register_contract(None, PaymentHub);
+        let hub_client = PaymentHubClient::new(&env, &hub_id);
+
+        let validator_id = env.register_contract(None, MockValidator);
+        hub_client.set_validator(&validator_id);
+
+        let sender = Address::generate(&env);
+        let recipient = Address::generate(&env);
+
+        env.mock_all_auths();
+
+        // Use try_invoke_contract to run without crashing the test thread on panic, allowing us to inspect events!
+        let result = env.try_invoke_contract::<(), soroban_sdk::Error>(
+            &hub_id,
+            &Symbol::new(&env, "send_payment"),
+            (sender.clone(), recipient.clone(), 1500i128, make_string(&env, "too big")).into_val(&env),
+        );
+        assert!(result.is_err());
+
+        // Assert that the LimitOver event was fired!
+        let events = env.events().all();
+        let mut found_limit_over = false;
+        for event in events.iter() {
+            let topics = event.1;
+            if topics.len() > 0
+                && soroban_sdk::Symbol::from_val(&env, &topics.get(0).unwrap())
+                    == symbol_short!("LimitOver")
+            {
+                found_limit_over = true;
+            }
+        }
+        assert!(found_limit_over);
     }
 }
