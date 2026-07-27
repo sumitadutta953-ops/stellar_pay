@@ -1,8 +1,7 @@
 import { useCallback } from 'react';
 import * as StellarSdk from '@stellar/stellar-sdk';
-import { useWalletStore } from '@/store/walletStore';
 import { useContractsStore } from '@/store/contractsStore';
-import { getXlmBalance, loadAccount, buildPaymentTransaction } from '@/services/stellar';
+import { loadAccount, buildPaymentTransaction } from '@/services/stellar';
 import { invokeContractFunction } from '@/services/contractService';
 import { parseTransactionError } from '@/utils/errorHandler';
 import { NETWORK_PASSPHRASE } from '@/utils/constants';
@@ -10,7 +9,6 @@ import { showToast } from '@/services/notificationService';
 import { logger } from '@/utils/logger';
 
 export function useTransaction() {
-  const walletStore = useWalletStore();
   const contractsStore = useContractsStore();
 
   const sendTransaction = useCallback(
@@ -43,7 +41,9 @@ export function useTransaction() {
         const native = sourceAccount.balances.find(b => b.asset_type === 'native');
         const bal = native ? parseFloat(native.balance) : 0;
         if (bal < parseFloat(amount) + 0.00001) {
-          throw new Error('Insufficient balance: Not enough XLM to cover this transaction and fees.');
+          throw new Error(
+            'Insufficient balance: Not enough XLM to cover this transaction and fees.'
+          );
         }
 
         // Build transaction
