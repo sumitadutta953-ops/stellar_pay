@@ -159,17 +159,22 @@ npm run dev
 
 ## 📸 Level 3 Screenshots (Submission Requirements)
 
-### Screenshot 1: Mobile Responsive UI
-![Mobile Responsive UI](./src/level_3_ss/mobile_ui.png)
-*App displaying cleanly on a mobile viewport (responsive layout)*
+### Screenshot 1: Web UI (Standard Desktop View)
+![Web UI (Desktop)](./src/level_3_ss/normal.png)
+*Desktop view showing the newly redesigned premium glassmorphic dashboard containing all the components.*
 
-### Screenshot 2: CI/CD Pipeline Running
-![CI/CD Pipeline](./src/level_3_ss/cicd_pipeline.png)
-*GitHub Actions CI/CD pipeline executing tests and builds*
+### Screenshot 2: Mobile Responsive UI (Layout Adjustments)
+- ![Mobile View 1](./src/level_3_ss/mobile_1.png) *Mobile UI: Compact layout for connect wallet panel.*
+- ![Mobile View 2](./src/level_3_ss/mobile_2.png) *Mobile UI: Form and transaction statuses stack cleanly on narrower screens.*
+- ![Mobile View 3](./src/level_3_ss/mobile_3.png) *Mobile UI: Interactive event logs and stats adjust perfectly to mobile viewports.*
 
-### Screenshot 3: Test Output (3+ Passing Tests)
-![Test Output](./src/level_3_ss/test_output.png)
-*Vitest/Cargo test suite showing multiple passing test cases*
+### Screenshot 3: CI/CD Pipeline Executing
+![CI/CD Pipeline](./src/level_3_ss/cicd.png)
+*GitHub Actions CI/CD workflow running the frontend build, contract tests, and lint checks on every commit.*
+
+### Screenshot 4: Test Output (Passing Suites)
+- ![Test Output 1](./src/level_3_ss/test1.png) *Frontend tests output: Vitest passing 38 unit and integration tests successfully.*
+- ![Test Output 2](./src/level_3_ss/test2.png) *Rust smart contract tests output: Cargo test passing all 13 core contract tests successfully.*
 
 ---
 
