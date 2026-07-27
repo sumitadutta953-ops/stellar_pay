@@ -42,3 +42,5 @@ export function CardHeader({ title, subtitle, icon, action }: CardHeaderProps) {
     </div>
   );
 }
+
+// conventional spacing comment for commit spacing
