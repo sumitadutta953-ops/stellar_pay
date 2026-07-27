@@ -56,3 +56,5 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-md' 
     </div>
   );
 }
+
+// conventional spacing comment for commit spacing
