@@ -18,8 +18,7 @@ export function Dashboard() {
       {/* Page Header */}
       <header className="mb-8">
         <h1 className="text-xl md:text-2xl font-extrabold text-[#F9FAFB] tracking-tight">
-          ⭐ StellarPay{' '}
-          <span className="text-[#7B61FF]">Pro</span>
+          ⭐ StellarPay <span className="text-[#7B61FF]">Pro</span>
         </h1>
         <p className="text-xs text-[#9CA3AF] mt-1 max-w-lg">
           Advanced payment platform on Stellar Testnet · Soroban Smart Contracts · Real-time events
@@ -28,12 +27,9 @@ export function Dashboard() {
 
       {/* Responsive Grid Layout */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-5 items-start">
-
         {/* Left column: Wallet + Stats + Contract */}
         <div className="md:col-span-1 lg:col-span-4 space-y-5">
-          <ErrorBoundary>
-            {!isConnected ? <WalletConnect /> : <WalletInfo />}
-          </ErrorBoundary>
+          <ErrorBoundary>{!isConnected ? <WalletConnect /> : <WalletInfo />}</ErrorBoundary>
 
           <ErrorBoundary>
             <PaymentStats />

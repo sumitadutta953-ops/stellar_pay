@@ -16,11 +16,11 @@ export function ContractPanel() {
   const [tempId, setTempId] = useState(counterContractId);
   const setCounterContractId = useContractsStore(s => s.setHubContractId);
 
-  const { data: counterRaw, isLoading: counterLoading, refetch } = useContractRead(
-    counterContractId,
-    'get_value',
-    !!counterContractId
-  );
+  const {
+    data: counterRaw,
+    isLoading: counterLoading,
+    refetch,
+  } = useContractRead(counterContractId, 'get_value', !!counterContractId);
 
   const counterValue = counterRaw
     ? (() => {
@@ -81,7 +81,10 @@ export function ContractPanel() {
                   Save
                 </button>
                 <button
-                  onClick={() => { setTempId(counterContractId); setIsEditingId(false); }}
+                  onClick={() => {
+                    setTempId(counterContractId);
+                    setIsEditingId(false);
+                  }}
                   className="text-[10px] text-[#9CA3AF] font-medium"
                 >
                   Cancel
@@ -104,9 +107,13 @@ export function ContractPanel() {
 
         {/* Counter value */}
         <div className="text-center py-5 border-b border-[rgba(123,97,255,0.08)]">
-          <p className="text-[10px] text-[#9CA3AF] uppercase tracking-widest mb-2">On-Chain Counter</p>
+          <p className="text-[10px] text-[#9CA3AF] uppercase tracking-widest mb-2">
+            On-Chain Counter
+          </p>
           {counterLoading ? (
-            <div className="flex justify-center py-2"><Spinner /></div>
+            <div className="flex justify-center py-2">
+              <Spinner />
+            </div>
           ) : (
             <p className="text-5xl font-extrabold text-[#F9FAFB] font-mono tracking-tight">
               {typeof counterValue === 'number' ? counterValue : '—'}

@@ -22,7 +22,13 @@ export function Header() {
               aria-label="Toggle navigation"
               className="p-2 rounded-lg text-[#9CA3AF] hover:text-[#F9FAFB] hover:bg-white/5 transition-colors"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>

@@ -4,7 +4,7 @@ import { formatXlm, shortenAddress, stroopsToXlm, xlmToStroops } from '@/utils/f
 describe('Formatting Utils', () => {
   describe('formatXlm', () => {
     it('formats a number to 7 decimal places', () => {
-      expect(formatXlm(9799.9999900)).toContain('9,799');
+      expect(formatXlm(9799.99999)).toContain('9,799');
     });
 
     it('handles zero', () => {

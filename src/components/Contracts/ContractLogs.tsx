@@ -22,7 +22,9 @@ export function ContractLogs() {
         {txState === 'success' && txHash && (
           <div className="p-3 rounded-xl bg-[#10B981]/8 border border-[#10B981]/20 space-y-1">
             <p className="text-xs font-semibold text-[#10B981]">✓ Contract call succeeded</p>
-            <p className="text-[10px] text-[#9CA3AF]">{formatTimestamp(Math.floor(Date.now() / 1000))}</p>
+            <p className="text-[10px] text-[#9CA3AF]">
+              {formatTimestamp(Math.floor(Date.now() / 1000))}
+            </p>
             <a
               href={`https://stellar.expert/explorer/testnet/tx/${txHash}`}
               target="_blank"

@@ -36,9 +36,7 @@ export function EventFeed() {
         )}
 
         {!counterContractId ? (
-          <div className="text-center py-6 text-sm text-[#9CA3AF]">
-            No contract ID configured
-          </div>
+          <div className="text-center py-6 text-sm text-[#9CA3AF]">No contract ID configured</div>
         ) : events.length === 0 ? (
           <div className="text-center py-6 space-y-2">
             <div className="w-8 h-8 rounded-full border-2 border-[#7B61FF]/30 border-t-[#7B61FF] animate-spin mx-auto" />
@@ -58,7 +56,9 @@ export function EventFeed() {
                   <span className="text-[10px] font-bold text-[#7B61FF] uppercase tracking-wider">
                     {ev.type}
                   </span>
-                  <span className="text-[10px] text-[#6B7280]">{formatTimestamp(ev.timestamp)}</span>
+                  <span className="text-[10px] text-[#6B7280]">
+                    {formatTimestamp(ev.timestamp)}
+                  </span>
                 </div>
                 {ev.topic.length > 0 && (
                   <div className="flex flex-wrap gap-1">
@@ -72,9 +72,7 @@ export function EventFeed() {
                     ))}
                   </div>
                 )}
-                <p className="text-[10px] font-mono text-[#9CA3AF] break-all">
-                  {ev.value}
-                </p>
+                <p className="text-[10px] font-mono text-[#9CA3AF] break-all">{ev.value}</p>
                 <p className="text-[9px] text-[#4B5563]">Ledger #{ev.ledger}</p>
               </div>
             ))}

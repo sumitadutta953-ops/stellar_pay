@@ -67,19 +67,22 @@ export function useWallet() {
     [store]
   );
 
-  const fundAccount = useCallback(async (publicKey: string) => {
-    try {
-      const res = await fetch(`https://friendbot.stellar.org/?addr=${publicKey}`);
-      if (!res.ok) throw new Error('Friendbot failed');
-      showToast('Account funded with 10,000 XLM!', 'success');
-      await new Promise(r => setTimeout(r, 2000));
-      const balance = await getXlmBalance(publicKey);
-      store.setBalance(balance);
-    } catch (err) {
-      const parsed = parseTransactionError(err);
-      showToast(parsed.message, 'error');
-    }
-  }, [store]);
+  const fundAccount = useCallback(
+    async (publicKey: string) => {
+      try {
+        const res = await fetch(`https://friendbot.stellar.org/?addr=${publicKey}`);
+        if (!res.ok) throw new Error('Friendbot failed');
+        showToast('Account funded with 10,000 XLM!', 'success');
+        await new Promise(r => setTimeout(r, 2000));
+        const balance = await getXlmBalance(publicKey);
+        store.setBalance(balance);
+      } catch (err) {
+        const parsed = parseTransactionError(err);
+        showToast(parsed.message, 'error');
+      }
+    },
+    [store]
+  );
 
   const signTx = useCallback(
     async (xdr: string): Promise<string> => {

@@ -15,7 +15,9 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-md' 
     } else {
       document.body.style.overflow = '';
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -38,7 +40,13 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-md' 
             className="text-[#9CA3AF] hover:text-[#F9FAFB] transition-colors p-1 rounded-lg hover:bg-white/5"
             aria-label="Close modal"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>

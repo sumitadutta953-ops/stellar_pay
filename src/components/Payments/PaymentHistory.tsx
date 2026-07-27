@@ -18,8 +18,8 @@ function PaymentRow({ payment }: { payment: HorizonPayment }) {
             isCredit
               ? 'bg-blue-500/10 text-blue-400'
               : isSent
-              ? 'bg-[#E11D48]/10 text-[#E11D48]'
-              : 'bg-[#10B981]/10 text-[#10B981]'
+                ? 'bg-[#E11D48]/10 text-[#E11D48]'
+                : 'bg-[#10B981]/10 text-[#10B981]'
           }`}
         >
           {isCredit ? 'FUNDED' : isSent ? 'SENT' : 'RECV'}

@@ -48,7 +48,9 @@ export function WalletInfo() {
         <div className="bg-black/30 rounded-xl p-3">
           <p className="text-[10px] text-[#9CA3AF] uppercase tracking-wider mb-1">Address</p>
           <div className="flex items-center justify-between gap-2">
-            <span className="font-mono text-xs text-[#F9FAFB] truncate">{shortenAddress(publicKey, 8)}</span>
+            <span className="font-mono text-xs text-[#F9FAFB] truncate">
+              {shortenAddress(publicKey, 8)}
+            </span>
             <button
               onClick={handleCopy}
               className="text-[10px] text-[#7B61FF] hover:text-[#9B81FF] transition-colors shrink-0 font-medium"
@@ -66,8 +68,7 @@ export function WalletInfo() {
             <Spinner size="md" />
           ) : (
             <p className="text-3xl font-extrabold text-[#F9FAFB] font-mono tracking-tight">
-              {formatXlm(balance)}{' '}
-              <span className="text-sm font-bold text-[#7B61FF]">XLM</span>
+              {formatXlm(balance)} <span className="text-sm font-bold text-[#7B61FF]">XLM</span>
             </p>
           )}
         </div>

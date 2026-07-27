@@ -63,11 +63,7 @@ describe('Validation Utils', () => {
 
   describe('validatePaymentForm', () => {
     it('returns no errors for valid form data', () => {
-      const errors = validatePaymentForm(
-        'G' + 'A'.repeat(55),
-        '10',
-        'test payment'
-      );
+      const errors = validatePaymentForm('G' + 'A'.repeat(55), '10', 'test payment');
       expect(Object.keys(errors)).toHaveLength(0);
     });
 

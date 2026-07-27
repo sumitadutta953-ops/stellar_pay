@@ -24,7 +24,12 @@ export function PaymentForm() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors(prev => { const n = { ...prev }; delete n[name]; return n; });
+    if (errors[name])
+      setErrors(prev => {
+        const n = { ...prev };
+        delete n[name];
+        return n;
+      });
   };
 
   const handleUseMax = () => {
@@ -35,7 +40,10 @@ export function PaymentForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validatePaymentForm(form.destination, form.amount, form.memo);
-    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
     setShowConfirm(true);
   };
 
@@ -67,7 +75,10 @@ export function PaymentForm() {
         <form onSubmit={handleSubmit} className="p-5 space-y-4" noValidate>
           {/* Destination */}
           <div>
-            <label htmlFor="destination" className="block text-xs text-[#9CA3AF] mb-1.5 font-medium">
+            <label
+              htmlFor="destination"
+              className="block text-xs text-[#9CA3AF] mb-1.5 font-medium"
+            >
               Recipient Address
             </label>
             <input
@@ -122,9 +133,7 @@ export function PaymentForm() {
                 XLM
               </span>
             </div>
-            {errors.amount && (
-              <p className="mt-1 text-[11px] text-[#E11D48]">{errors.amount}</p>
-            )}
+            {errors.amount && <p className="mt-1 text-[11px] text-[#E11D48]">{errors.amount}</p>}
           </div>
 
           {/* Memo */}

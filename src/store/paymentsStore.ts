@@ -20,8 +20,7 @@ export const usePaymentsStore = create<PaymentsState>(set => ({
   paymentCount: 0,
 
   setHistory: history => set({ history }),
-  addPayment: payment =>
-    set(state => ({ history: [payment, ...state.history].slice(0, 50) })),
+  addPayment: payment => set(state => ({ history: [payment, ...state.history].slice(0, 50) })),
   setTotalSent: totalSent => set({ totalSent }),
   setPaymentCount: paymentCount => set({ paymentCount }),
   setLoading: isLoading => set({ isLoading }),

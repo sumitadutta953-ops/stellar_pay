@@ -12,11 +12,7 @@ export function Spinner({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
 }
 
 export function SkeletonLine({ className = '' }: { className?: string }) {
-  return (
-    <div
-      className={`bg-[#1C1F35] rounded animate-pulse ${className}`}
-    />
-  );
+  return <div className={`bg-[#1C1F35] rounded animate-pulse ${className}`} />;
 }
 
 export function CardSkeleton() {
