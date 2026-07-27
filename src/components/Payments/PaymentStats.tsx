@@ -1,5 +1,4 @@
 import React from 'react';
-import { useWallet } from '@/hooks/useWallet';
 import { useContractRead } from '@/hooks/useContract';
 import { useContractsStore } from '@/store/contractsStore';
 import { Card, CardHeader } from '@/components/Common/Card';
@@ -17,15 +16,18 @@ function StatBox({ label, value, icon }: { label: string; value: string | number
 }
 
 export function PaymentStats() {
-  const { publicKey } = useWallet();
   const { counterContractId } = useContractsStore();
 
-  const { data: counterRaw, isLoading } = useContractRead(counterContractId, 'get_value', !!counterContractId);
+  const { data: counterRaw, isLoading } = useContractRead(
+    counterContractId,
+    'get_value',
+    !!counterContractId
+  );
 
   const counterValue = counterRaw
-    ? (typeof StellarSdk.scValToNative(counterRaw) === 'bigint'
-        ? Number(StellarSdk.scValToNative(counterRaw))
-        : StellarSdk.scValToNative(counterRaw))
+    ? typeof StellarSdk.scValToNative(counterRaw) === 'bigint'
+      ? Number(StellarSdk.scValToNative(counterRaw))
+      : StellarSdk.scValToNative(counterRaw)
     : 0;
 
   return (
