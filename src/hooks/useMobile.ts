@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 
 const MOBILE_BREAKPOINT = 768;
 
+/**
+ * Hook to detect whether the viewport is mobile-sized (less than 768px).
+ * Responsive utility mapping closely to Tailwind md: breakpoint.
+ */
 export function useMobile(): boolean {
   const [isMobile, setIsMobile] = useState<boolean>(
     typeof window !== 'undefined' ? window.innerWidth < MOBILE_BREAKPOINT : false
