@@ -7,6 +7,11 @@ import {
 } from '@/utils/constants';
 import { storageService, STORAGE_KEYS } from '@/services/storageService';
 
+/**
+ * Zustand store to manage smart contract addresses, simulation results,
+ * contract transaction statuses, and recent contract events.
+ * Automatically synchronizes contract addresses with browser localStorage.
+ */
 interface ContractsState {
   hubContractId: string;
   validatorContractId: string;
@@ -50,8 +55,7 @@ export const useContractsStore = create<ContractsState>(set => ({
     set({ validatorContractId: id });
   },
 
-  addEvent: event =>
-    set(state => ({ events: [event, ...state.events].slice(0, 50) })),
+  addEvent: event => set(state => ({ events: [event, ...state.events].slice(0, 50) })),
 
   setEvents: events => set({ events }),
   setCounterValue: counterValue => set({ counterValue }),
