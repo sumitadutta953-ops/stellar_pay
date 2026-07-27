@@ -13,3 +13,5 @@ export function Footer() {
     </footer>
   );
 }
+
+// conventional spacing comment for commit spacing
