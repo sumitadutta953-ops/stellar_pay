@@ -27,7 +27,10 @@ export async function fetchContractEvents(
     return (response.events ?? []).map((ev, idx) => ({
       id: `${ev.ledger}-${idx}`,
       type: ev.type,
-      contractId: (ev.contractId as any)?.contractId?.('C') || (ev.contractId as any)?.toString() || contractId,
+      contractId:
+        (ev.contractId as any)?.contractId?.('C') ||
+        (ev.contractId as any)?.toString() ||
+        contractId,
       topic: ev.topic.map(t => {
         try {
           return JSON.stringify(StellarSdk.scValToNative(t));
@@ -43,7 +46,9 @@ export async function fetchContractEvents(
         }
       })(),
       ledger: ev.ledger,
-      timestamp: ev.ledgerClosedAt ? new Date(ev.ledgerClosedAt).getTime() / 1000 : Date.now() / 1000,
+      timestamp: ev.ledgerClosedAt
+        ? new Date(ev.ledgerClosedAt).getTime() / 1000
+        : Date.now() / 1000,
     }));
   } catch (err) {
     logger.warn('Event polling error:', err);
