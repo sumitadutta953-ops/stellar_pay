@@ -2,6 +2,8 @@
 members = [
     "payment-hub",
     "payment-validator",
+    "escrow",
+    "arbitration",
 ]
 resolver = "2"
 
