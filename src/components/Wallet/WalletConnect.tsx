@@ -2,7 +2,6 @@ import React from 'react';
 import { useWallet } from '@/hooks/useWallet';
 import { Button } from '@/components/Common/Button';
 import { Card, CardHeader } from '@/components/Common/Card';
-import { Spinner } from '@/components/Common/Loading';
 
 export function WalletConnect() {
   const { isConnected, isInstalled, loading, error, connectWallet, connectDemoWallet } =
