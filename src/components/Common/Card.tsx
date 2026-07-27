@@ -11,10 +11,10 @@ export function Card({ children, className = '', glow = false, id }: CardProps) 
   return (
     <div
       id={id}
-      className={`relative rounded-2xl border border-[rgba(123,97,255,0.12)] bg-[rgba(15,17,30,0.75)] backdrop-blur-md shadow-xl overflow-hidden ${glow ? 'shadow-[#7B61FF]/10' : ''} ${className}`}
+      className={`relative glass-card rounded-2xl overflow-hidden ${glow ? 'shadow-purple-500/10' : ''} ${className}`}
     >
       {glow && (
-        <div className="absolute -top-12 -right-12 w-32 h-32 bg-[#7B61FF]/8 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-12 -right-12 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl pointer-events-none mix-blend-screen" />
       )}
       {children}
     </div>
@@ -30,12 +30,12 @@ interface CardHeaderProps {
 
 export function CardHeader({ title, subtitle, icon, action }: CardHeaderProps) {
   return (
-    <div className="flex items-center justify-between px-5 pt-5 pb-3 border-b border-[rgba(123,97,255,0.08)]">
-      <div className="flex items-center gap-2">
-        {icon && <span className="text-base">{icon}</span>}
+    <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/5 bg-slate-900/20">
+      <div className="flex items-center gap-3">
+        {icon && <span className="text-xl drop-shadow-md">{icon}</span>}
         <div>
-          <h3 className="text-xs font-bold text-[#9CA3AF] uppercase tracking-widest">{title}</h3>
-          {subtitle && <p className="text-[10px] text-[#6B7280] mt-0.5">{subtitle}</p>}
+          <h3 className="text-sm font-bold text-slate-300 uppercase tracking-[0.2em]">{title}</h3>
+          {subtitle && <p className="text-xs text-slate-500 mt-1">{subtitle}</p>}
         </div>
       </div>
       {action && <div>{action}</div>}
@@ -43,4 +43,3 @@ export function CardHeader({ title, subtitle, icon, action }: CardHeaderProps) {
   );
 }
 
-// conventional spacing comment for commit spacing

@@ -12,13 +12,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    'bg-[#7B61FF] hover:bg-[#6B51EF] text-white shadow-lg shadow-[#7B61FF]/20 disabled:opacity-40',
+    'bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 hover:from-indigo-400 hover:via-purple-400 hover:to-fuchsia-400 text-white shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 hover:-translate-y-0.5 active:scale-95 disabled:opacity-40 disabled:hover:translate-y-0 disabled:active:scale-100 disabled:shadow-none',
   secondary:
-    'bg-[#1C1F35] hover:bg-[#252A47] border border-[rgba(123,97,255,0.2)] text-[#F9FAFB] disabled:opacity-40',
+    'bg-slate-900/60 hover:bg-slate-800/80 backdrop-blur-md border border-slate-700/50 hover:border-slate-500/50 text-slate-100 hover:-translate-y-0.5 active:scale-95 disabled:opacity-40 disabled:hover:translate-y-0 disabled:active:scale-100 shadow-xl shadow-black/20',
   ghost:
-    'bg-transparent hover:bg-[#1C1F35] text-[#9CA3AF] hover:text-[#F9FAFB] disabled:opacity-40',
+    'bg-transparent hover:bg-slate-800/60 text-slate-400 hover:text-slate-100 hover:-translate-y-0.5 active:scale-95 disabled:opacity-40 disabled:hover:translate-y-0 disabled:active:scale-100',
   danger:
-    'bg-[#E11D48]/10 hover:bg-[#E11D48]/20 border border-[#E11D48]/30 text-[#E11D48] disabled:opacity-40',
+    'bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-500 hover:text-rose-400 hover:-translate-y-0.5 active:scale-95 disabled:opacity-40 disabled:hover:translate-y-0 disabled:active:scale-100',
 };
 
 const sizeClasses: Record<Size, string> = {

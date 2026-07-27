@@ -19,16 +19,17 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen bg-gradient-to-b from-[#070911] to-[#0D0F1A] text-[#F9FAFB] flex flex-col relative overflow-x-hidden">
-        {/* Ambient background glows */}
-        <div className="fixed top-0 left-1/4 w-96 h-96 bg-[#7B61FF]/4 rounded-full blur-[120px] pointer-events-none" />
-        <div className="fixed bottom-0 right-1/4 w-72 h-72 bg-[#10B981]/3 rounded-full blur-[100px] pointer-events-none" />
+      <div className="min-h-screen bg-mesh text-slate-100 flex flex-col relative overflow-x-hidden selection:bg-purple-500/30">
+        {/* Dynamic ambient glowing orbs */}
+        <div className="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[150px] pointer-events-none mix-blend-screen animate-float" />
+        <div className="fixed bottom-[-10%] right-[-5%] w-[600px] h-[600px] bg-fuchsia-600/10 rounded-full blur-[150px] pointer-events-none mix-blend-screen animate-pulse-glow" />
+        <div className="fixed top-[40%] left-[60%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen animate-float" style={{ animationDelay: '2s' }} />
 
         <ErrorBoundary>
           <Header />
           <Sidebar />
           <Dashboard />
-          <div className="max-w-[1200px] mx-auto w-full px-4 md:px-8">
+          <div className="max-w-[1200px] mx-auto w-full px-4 md:px-8 relative z-10">
             <Footer />
           </div>
         </ErrorBoundary>

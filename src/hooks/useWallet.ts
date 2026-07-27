@@ -1,32 +1,36 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import * as StellarSdk from '@stellar/stellar-sdk';
+import { isConnected as checkIsConnected, getAddress as getFreighterAddress, signTransaction as signFreighterTransaction } from '@stellar/freighter-api';
 import { useWalletStore } from '@/store/walletStore';
 import { getXlmBalance, loadAccount } from '@/services/stellar';
 import { parseTransactionError } from '@/utils/errorHandler';
 import { logger } from '@/utils/logger';
 import { showToast } from '@/services/notificationService';
 
-declare global {
-  interface Window {
-    freighter?: {
-      isConnected: () => Promise<boolean>;
-      getPublicKey: () => Promise<string>;
-      signTransaction: (xdr: string, opts: { networkPassphrase: string }) => Promise<string>;
-    };
-  }
-}
-
 export function useWallet() {
   const store = useWalletStore();
+  const [isInstalled, setIsInstalled] = useState<boolean>(false);
 
-  const isInstalled = typeof window !== 'undefined' && !!window.freighter;
+  useEffect(() => {
+    // Check if Freighter is installed on mount
+    checkIsConnected().then(res => {
+      setIsInstalled(res.isConnected);
+    }).catch(() => setIsInstalled(false));
+  }, []);
 
   const connectWallet = useCallback(async () => {
     store.setLoading(true);
     store.setError(null);
     try {
-      if (!window.freighter) throw new Error('Freighter not installed');
-      const publicKey = await window.freighter.getPublicKey();
+      const connRes = await checkIsConnected();
+      if (!connRes.isConnected) throw new Error('Freighter not installed or not available');
+      
+      const addrRes = await getFreighterAddress();
+      if (addrRes.error) throw new Error(addrRes.error as string);
+      
+      const publicKey = addrRes.address;
+      if (!publicKey) throw new Error('Failed to get public key from Freighter');
+      
       const balance = await getXlmBalance(publicKey);
       store.setWallet(publicKey, balance, false);
       showToast('Wallet connected!', 'success');
@@ -87,23 +91,29 @@ export function useWallet() {
   const signTx = useCallback(
     async (xdr: string): Promise<string> => {
       if (store.isDemoMode) {
-        // Demo mode: find the keypair from the stored address (not real — return the XDR as-is)
-        // In a real demo we'd store the keypair; for now just throw to indicate demo limit
         throw new Error('User rejected: Demo mode cannot sign real transactions');
       }
-      if (!window.freighter) throw new Error('Freighter not available');
-      return window.freighter.signTransaction(xdr, {
+      
+      const connRes = await checkIsConnected();
+      if (!connRes.isConnected) throw new Error('Freighter not available');
+      
+      const res = await signFreighterTransaction(xdr, {
         networkPassphrase: 'Test SDF Network ; September 2015',
       });
+      
+      if (res.error) {
+        throw new Error(res.error as string);
+      }
+      
+      return res.signedTxXdr;
     },
     [store.isDemoMode]
   );
 
-  // Verify Freighter is actually connected (not just installed)
   const verifyConnection = useCallback(async () => {
-    if (!window.freighter) return false;
     try {
-      return await window.freighter.isConnected();
+      const res = await checkIsConnected();
+      return res.isConnected;
     } catch {
       return false;
     }
@@ -124,7 +134,6 @@ export function useWallet() {
     fundAccount,
     signTx,
     verifyConnection,
-    // expose account loader for components that need full account
     loadAccount,
   };
 }
