@@ -157,6 +157,22 @@ npm run dev
 
 ---
 
+## 📸 Level 3 Screenshots (Submission Requirements)
+
+### Screenshot 1: Mobile Responsive UI
+![Mobile Responsive UI](./src/level_3_ss/mobile_ui.png)
+*App displaying cleanly on a mobile viewport (responsive layout)*
+
+### Screenshot 2: CI/CD Pipeline Running
+![CI/CD Pipeline](./src/level_3_ss/cicd_pipeline.png)
+*GitHub Actions CI/CD pipeline executing tests and builds*
+
+### Screenshot 3: Test Output (3+ Passing Tests)
+![Test Output](./src/level_3_ss/test_output.png)
+*Vitest/Cargo test suite showing multiple passing test cases*
+
+---
+
 ## 🔗 Level 2: Smart Contract Details
 
 ### Deployed Contract Information
