@@ -172,3 +172,5 @@ export function ContractPanel() {
     </Card>
   );
 }
+
+// conventional spacing comment for commit spacing
