@@ -7,8 +7,7 @@ export const SOROBAN_RPC_URL =
 export const NETWORK_PASSPHRASE =
   import.meta.env.VITE_NETWORK_PASSPHRASE ?? 'Test SDF Network ; September 2015';
 
-export const PAYMENT_HUB_CONTRACT_ID =
-  import.meta.env.VITE_PAYMENT_HUB_CONTRACT_ID ?? '';
+export const PAYMENT_HUB_CONTRACT_ID = import.meta.env.VITE_PAYMENT_HUB_CONTRACT_ID ?? '';
 
 export const PAYMENT_VALIDATOR_CONTRACT_ID =
   import.meta.env.VITE_PAYMENT_VALIDATOR_CONTRACT_ID ?? '';
