@@ -8,6 +8,10 @@ export interface Toast {
   duration: number;
 }
 
+/**
+ * Zustand store to manage global UI state, including active screen alerts/toasts
+ * and mobile navigation sidebar toggle states.
+ */
 interface UiState {
   toasts: Toast[];
   isSidebarOpen: boolean;
@@ -29,8 +33,7 @@ export const useUiStore = create<UiState>(set => ({
     }, toast.duration);
   },
 
-  removeToast: id =>
-    set(state => ({ toasts: state.toasts.filter(t => t.id !== id) })),
+  removeToast: id => set(state => ({ toasts: state.toasts.filter(t => t.id !== id) })),
 
   toggleSidebar: () => set(state => ({ isSidebarOpen: !state.isSidebarOpen })),
   closeSidebar: () => set({ isSidebarOpen: false }),
