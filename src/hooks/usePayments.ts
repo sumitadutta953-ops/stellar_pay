@@ -7,7 +7,10 @@ import type { PaymentFormData } from '@/types/payment';
 import { validatePaymentForm } from '@/utils/validation';
 import { showToast } from '@/services/notificationService';
 
-/** Fetch recent Horizon payment operations for the current wallet */
+/**
+ * Hook to retrieve and cache recent Horizon payment operations for the active wallet address.
+ * Integrates TanStack Query for cache synchronization.
+ */
 export function usePaymentHistory() {
   const { address } = useWalletStore();
 
@@ -19,7 +22,11 @@ export function usePaymentHistory() {
   });
 }
 
-/** Send a payment with validation, signing, and cache invalidation */
+/**
+ * Hook to handle submitting payments. 
+ * Performs frontend validation, requests Freighter signature, submits to Horizon,
+ * and invalidates payments cache upon success.
+ */
 export function useSendPayment() {
   const queryClient = useQueryClient();
   const { publicKey, signTx, refreshBalance } = useWallet();
